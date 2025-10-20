@@ -17,12 +17,15 @@ namespace ApiMongoDemo.Controllers
         [HttpGet("test")]
         public async Task<IActionResult> TestConnection()
         {
-            var isConnected = await _mongoService.TestConnectionAsync();
-
-            if (isConnected)
-                return Ok(new { status = "OK", message = "Conexión exitosa a MongoDB" });
-            else
-                return StatusCode(500, new { status = "Error", message = "No se pudo conectar a MongoDB" });
+            try
+            {
+                await _mongoService.TestConnectionAsync();
+                return Ok(new { status = "OK", message = "Conexión exitosa a MongoDB." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { status = "Error", message = ex.Message });
+            }
         }
 
         // [HttpGet("products")]

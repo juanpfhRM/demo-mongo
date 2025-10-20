@@ -13,6 +13,7 @@ namespace ApiMongoDemo.Services
 
     public class MongoService
     {
+        private readonly IMongoClient _client;
         private readonly IMongoDatabase _database;
 
         public MongoService()
@@ -23,20 +24,29 @@ namespace ApiMongoDemo.Services
             if (string.IsNullOrEmpty(connectionString) || string.IsNullOrEmpty(databaseName))
                 throw new Exception("No se encontró la configuración de MongoDB en las variables de entorno.");
 
-            var client = new MongoClient(connectionString);
-            _database = client.GetDatabase(databaseName);
+            _client = new MongoClient(connectionString);
+            _database = _client.GetDatabase(databaseName);
         }
 
-        public async Task<bool> TestConnectionAsync()
+        public async Task TestConnectionAsync()
         {
             try
             {
-                await _database.RunCommandAsync((Command<MongoDB.Bson.BsonDocument>)"{ping:1}");
-                return true;
+                await _client.ListDatabaseNamesAsync();  
+
+                var dbName = Environment.GetEnvironmentVariable("MONGO_DATABASE_NAME");
+                var databaseNames = await _client.ListDatabaseNames().ToListAsync();
+
+                if (!databaseNames.Contains(dbName))
+                    throw new Exception($"La base de datos '{dbName}' no existe.");
             }
-            catch
+            catch (MongoException mex)
             {
-                return false;
+                throw new Exception("No se pudo conectar a MongoDB. Verifica la cadena de conexión.", mex);
+            }
+            catch (TimeoutException tex)
+            {
+                throw new Exception("La conexión a MongoDB tardó demasiado. Verifica la cadena de conexión o si el servidor está disponible.", tex);
             }
         }
 
