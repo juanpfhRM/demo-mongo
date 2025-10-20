@@ -37,3 +37,6 @@ C:\Users\Owner\Documents\dev\.Net\DemoMongo\bin\Debug\net8.0\MongoDB.Driver.dll
 C:\Users\Owner\Documents\dev\.Net\DemoMongo\bin\Debug\net8.0\SharpCompress.dll
 C:\Users\Owner\Documents\dev\.Net\DemoMongo\bin\Debug\net8.0\Snappier.dll
 C:\Users\Owner\Documents\dev\.Net\DemoMongo\bin\Debug\net8.0\ZstdSharp.dll
+C:\Users\Owner\Documents\dev\.Net\DemoMongo\bin\Debug\net8.0\DotNetEnv.dll
+C:\Users\Owner\Documents\dev\.Net\DemoMongo\bin\Debug\net8.0\Sprache.dll
+C:\Users\Owner\Documents\dev\.Net\DemoMongo\obj\Debug\net8.0\DemoMongo.sourcelink.json

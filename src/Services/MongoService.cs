@@ -14,12 +14,17 @@ namespace ApiMongoDemo.Services
     public class MongoService
     {
         private readonly IMongoDatabase _database;
-        private readonly MongoClient _client;
 
-        public MongoService(IOptions<MongoSettings> settings)
+        public MongoService()
         {
-            _client = new MongoClient(settings.Value.ConnectionString);
-            _database = _client.GetDatabase(settings.Value.DatabaseName);
+            var connectionString = Environment.GetEnvironmentVariable("MONGO_CONNECTION_STRING");
+            var databaseName = Environment.GetEnvironmentVariable("MONGO_DATABASE_NAME");
+
+            if (string.IsNullOrEmpty(connectionString) || string.IsNullOrEmpty(databaseName))
+                throw new Exception("No se encontró la configuración de MongoDB en las variables de entorno.");
+
+            var client = new MongoClient(connectionString);
+            _database = client.GetDatabase(databaseName);
         }
 
         public async Task<bool> TestConnectionAsync()
